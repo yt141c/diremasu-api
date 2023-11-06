@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ja',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Kreait\Laravel\Firebase\ServiceProvider::class,
+        App\Providers\HashidsServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,5 +186,18 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hashids Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Hashidsの設定
+    |
+    */
+
+    'hashids_salt' => env('HASHIDS_SALT', 'default_salt'),
+    'hashids_length' => env('HASHIDS_LENGTH', 10),
 
 ];

@@ -18,16 +18,11 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('video_url', 255);
             $table->longtext('description');
-            $table->string('slug', 255)->nullable();
-            $table->string('prev_lecture_slug', 255)->nullable();
-            $table->string('next_lecture_slug', 255)->nullable();
             $table->boolean('is_premium')->default(1);
             $table->boolean('published')->default(0);
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index('section_id');
-            $table->unique(['slug']);
             $table->index(['section_id', 'order']);
 
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
