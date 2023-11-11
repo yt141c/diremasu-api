@@ -49,4 +49,10 @@ class Course extends Model
     {
         return app('hashids')->encode($this->id);
     }
+
+    // sectonへのリレーション
+    public function sections()
+    {
+        return $this->hasMany('App\Models\Section');
+    }
 }

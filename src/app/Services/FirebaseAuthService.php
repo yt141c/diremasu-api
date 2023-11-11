@@ -22,6 +22,26 @@ class FirebaseAuthService
         $this->auth = (new Factory)->withServiceAccount($credentialsPath)->createAuth();
     }
 
+
+    /**
+     * ログインユーザーの情報を取得します。
+     *
+     * @param string $uid FirebaseユーザーID
+     * @return array レスポンスデータ
+     */
+    public function signInUser(array $credentials): array
+    {
+        try {
+            $signInResult = $this->auth->signInWithEmailAndPassword($credentials['email'], $credentials['password']);
+            // ここで必要なユーザー情報やトークンなどを取得してレスポンスに含める
+            return ['user' => $signInResult->data(), 'status' => 200];
+        } catch (\Throwable $e) {
+            Log::error('An error occurred while signing in: ' . $e->getMessage());
+            return $this->errorResponse('Failed to sign in', self::UNKNOWN_ERROR);
+        }
+    }
+
+
     /**
      * 新しいFirebaseユーザーを作成し、ローカルデータベースに同期します。
      *
@@ -36,8 +56,21 @@ class FirebaseAuthService
             return $firebaseUserResponse;
         }
 
+        // 新規作成したユーザーでサインイン
+        $signInResponse = $this->signInUser($userData);
+        if ($this->hasError($signInResponse)) {
+            return $signInResponse;
+        }
+
+        // DBにユーザーを作成
         $firebaseUser = $firebaseUserResponse['user'];
-        return $this->createLocalUser($firebaseUser, $userData);
+        $localUserResponse = $this->createLocalUser($firebaseUser, $userData);
+
+        if ($this->hasError($localUserResponse)) {
+            return $localUserResponse;
+        }
+
+        return $signInResponse;
     }
 
     /**
