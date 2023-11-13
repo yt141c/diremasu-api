@@ -16,12 +16,10 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-        Log::debug($request->all());
         // Firebase認証済みのUIDを取得
         $uid = $request->attributes->get('firebase_uid');
         $name = $request->input('name');
 
-        Log::debug([$name]);
 
         // 既存のユーザーを確認
         $existingUser = User::where('firebase_uid', $uid)->first();

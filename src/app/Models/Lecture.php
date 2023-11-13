@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\UserLessonProgress;
 
 class Lecture extends Model
 {
@@ -45,11 +46,6 @@ class Lecture extends Model
         return app('hashids')->encode($this->id);
     }
 
-    public function section()
-    {
-        return $this->belongsTo(Section::class);
-    }
-
     // idをハッシュ化する
     public function getPublicIdAttribute()
     {
@@ -59,5 +55,16 @@ class Lecture extends Model
     public function getPublicSectionIdAttribute()
     {
         return app('hashids')->encode($this->section_id);
+    }
+
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
+    public function userLessonProgresses()
+    {
+        return $this->hasMany(UserLessonProgress::class);
     }
 }

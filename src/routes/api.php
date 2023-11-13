@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LectureController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LectureCompletionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,13 +26,15 @@ Route::middleware(['auth.firebase'])->group(function () {
     Route::get('/courses/{hashid}', [CourseController::class, 'show']);
 
     Route::get('/lectures/{hashid}', [LectureController::class, 'show'])->name('lecture');
+    Route::post('/lectures/complete', [LectureCompletionController::class, 'store']);
+
 
     Route::get('/user/exists', [UserController::class, 'index']);
     Route::post('/user/create', [UserController::class, 'create']);
 });
 
 
-Route::get('/courses/{hashid}', [CourseController::class, 'show']);
+Route::get('/courses/{hashid}/trial', [CourseController::class, 'showTrial']);
 Route::get('/lectures/{hashid}/trial', [LectureController::class, 'showTrial'])->name('lecture');
 
 
