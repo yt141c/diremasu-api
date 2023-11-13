@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('user_lesson_progress', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('lesson_id')->unsigned()->nullable();
+            $table->bigInteger('lecture_id')->unsigned()->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('lesson_id')->references('id')->on('lectures')->onDelete('set null');
-            $table->unique(['user_id', 'lesson_id']);
+            $table->foreign('lecture_id')->references('id')->on('lectures')->onDelete('set null');
+            $table->unique(['user_id', 'lecture_id']);
         });
     }
 

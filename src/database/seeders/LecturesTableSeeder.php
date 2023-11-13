@@ -29,6 +29,7 @@ class LecturesTableSeeder extends Seeder
                 'name' => $record['name'],
                 'description' => $record['description'],
                 'video_url' => $record['video_url'],
+                'trial' => $record['trial'],
             ]);
         }
     }

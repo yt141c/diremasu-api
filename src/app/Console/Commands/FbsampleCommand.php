@@ -12,7 +12,7 @@ class FbsampleCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:fbsample';
+    protected $signature = 'fb:sample';
 
     /**
      * The console command description.
