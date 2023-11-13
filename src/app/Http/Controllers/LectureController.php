@@ -29,8 +29,8 @@ class LectureController extends Controller
     public function show(string $hashid)
     {
         // hashidをidにデコードしてlectureを取得する
-        // $ids = app('hashids')->decode($hashid);
-        $ids[0] = $hashid;
+        $ids = app('hashids')->decode($hashid);
+        // $ids[0] = $hashid;
 
         //該当のlectureがなければ404を返す
         if (empty($ids)) {
@@ -57,6 +57,33 @@ class LectureController extends Controller
 
         return $resource;
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showTrial(string $hashid)
+    {
+        // hashidをidにデコードしてlectureを取得する
+        $ids = app('hashids')->decode($hashid);
+        // $ids[0] = $hashid;
+
+        // 該当のlectureがなければ404を返す
+        if (empty($ids)) {
+            return response()->json(['message' => 'Lecture not found'], 404);
+        }
+
+        // デコードされたIDを使ってレクチャーを取得、ただしtrialフラグが1のデータは除外
+        $lecture = Lecture::with('section.course')
+            ->where('id', $ids[0])
+            ->where('trial', 1) // ここでtrialフラグが1でないものをフィルタリング
+            ->firstOrFail();
+
+        // LectureResourceのインスタンスを作成
+        $resource = new LectureResource($lecture);
+
+        return $resource;
+    }
+
 
     /**
      * Update the specified resource in storage.

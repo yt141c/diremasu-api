@@ -12,7 +12,7 @@ class Lecture extends Model
 
     protected $appends = ['public_id', 'public_section_id'];
 
-    protected $fillable = ['section_id', 'name', 'description', 'order', 'video_url', 'published'];
+    protected $fillable = ['section_id', 'name', 'description', 'order', 'video_url', 'published', 'trial'];
 
     protected $hidden = [
         'id',

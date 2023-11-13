@@ -20,6 +20,7 @@ return new class extends Migration
             $table->longtext('description');
             $table->boolean('is_premium')->default(1);
             $table->boolean('published')->default(0);
+            $table->boolean('trial')->default(0);
             $table->softDeletes();
             $table->timestamps();
 

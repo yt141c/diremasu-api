@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LectureController;
-use App\Http\Controllers\Auth\FirebaseAuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,13 +23,19 @@ Route::middleware(['auth.firebase'])->group(function () {
     });
     Route::get('/courses', [CourseController::class, 'index']);
     Route::get('/courses/{hashid}', [CourseController::class, 'show']);
-    // すべてのレクチャーを取得する
-    // Route::get('/lectures', [LectureController::class, 'index']);
+
     Route::get('/lectures/{hashid}', [LectureController::class, 'show'])->name('lecture');
+
+    Route::get('/user/exists', [UserController::class, 'index']);
+    Route::post('/user/create', [UserController::class, 'create']);
 });
 
 
-Route::post('/users/create', [FirebaseAuthController::class, 'firebaseSignUpWithEmailAndPassword']);
+Route::get('/courses/{hashid}', [CourseController::class, 'show']);
+Route::get('/lectures/{hashid}/trial', [LectureController::class, 'showTrial'])->name('lecture');
+
+
+
 
 Route::get('/test', function () {
     return response()->json(['status' => 'this is test sample json'], 200);
