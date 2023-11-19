@@ -22,23 +22,21 @@ Route::middleware(['auth.firebase'])->group(function () {
     Route::get('/auth', function () {
         return response()->json(['status' => 'authorized'], 200);
     });
+    Route::post('/user/create', [UserController::class, 'create']);
+    Route::get('/user/exists', [UserController::class, 'index']);
+    Route::get('/user', [UserController::class, 'show']);
+    Route::delete('/user', [UserController::class, 'destroy']);
+
     Route::get('/courses', [CourseController::class, 'index']);
-    Route::get('/courses/{hashid}', [CourseController::class, 'show']);
+    Route::get('/courses/{name}', [CourseController::class, 'show']);
 
     Route::get('/lectures/{hashid}', [LectureController::class, 'show'])->name('lecture');
     Route::post('/lectures/complete', [LectureCompletionController::class, 'store']);
-
-
-    Route::get('/user/exists', [UserController::class, 'index']);
-    Route::post('/user/create', [UserController::class, 'create']);
 });
 
 
-Route::get('/courses/{hashid}/trial', [CourseController::class, 'showTrial']);
-Route::get('/lectures/{hashid}/trial', [LectureController::class, 'showTrial'])->name('lecture');
-
-
-
+Route::get('/courses/{name}/trial', [CourseController::class, 'showTrial']);
+// Route::get('/lectures/{hashid}/trial', [LectureController::class, 'showTrial'])->name('lecture');
 
 Route::get('/test', function () {
     return response()->json(['status' => 'this is test sample json'], 200);

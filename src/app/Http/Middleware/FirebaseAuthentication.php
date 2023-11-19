@@ -16,7 +16,6 @@ class FirebaseAuthentication
     public function __construct(FirebaseAuth $auth)
     {
         $this->auth = $auth;
-        $credintialsPath = storage_path(config('firebase.projects.diremasu.credentials'));
     }
 
     /**

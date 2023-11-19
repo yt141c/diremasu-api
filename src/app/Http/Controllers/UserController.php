@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Kreait\Firebase\Exception\Auth\UserNotFound;
+use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -50,5 +53,66 @@ class UserController extends Controller
 
         $userExists = User::where('firebase_uid', $uid)->exists();
         return response()->json(['exists' => $userExists]);
+    }
+
+    /**
+     * ユーザー情報を取得します。
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+        $uid = $request->attributes->get('firebase_uid');
+        Log::info($uid);
+
+        $user = User::where('firebase_uid', $uid)->first();
+        Log::info($user);
+        if ($user) {
+            return response()->json(['user' => $user]);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    }
+
+
+    /**
+     * ユーザー情報を削除します。
+     *
+     * @param Request $request
+     * @param Auth $firebaseAuth
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, FirebaseAuth $firebaseAuth)
+    {
+        DB::beginTransaction();
+
+        try {
+            $uid = $request->attributes->get('firebase_uid');
+            Log::info('Deleting user with UID: ' . $uid);
+
+            $user = User::where('firebase_uid', $uid)->first();
+            if (!$user) {
+                DB::rollBack();
+                return response()->json(['message' => 'User not found'], 404);
+            }
+
+            $user->delete();
+
+            try {
+                $firebaseAuth->deleteUser($uid);
+            } catch (UserNotFound $e) {
+                Log::error('Firebase user not found: ' . $e->getMessage());
+                DB::rollBack();
+                return response()->json(['message' => 'Firebase user not found'], 404);
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'User deleted'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error deleting user: ' . $e->getMessage());
+            return response()->json(['message' => 'Error deleting user'], 500);
+        }
     }
 }
