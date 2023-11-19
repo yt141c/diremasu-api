@@ -31,6 +31,9 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'id',
+        'firebase_uid',
+        'created_at',
+        'updated_at'
     ];
 
     /**

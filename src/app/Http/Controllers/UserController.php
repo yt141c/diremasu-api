@@ -64,17 +64,14 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $uid = $request->attributes->get('firebase_uid');
-        Log::info($uid);
 
         $user = User::where('firebase_uid', $uid)->first();
-        Log::info($user);
         if ($user) {
             return response()->json(['user' => $user]);
         } else {
             return response()->json(['message' => 'User not found'], 404);
         }
     }
-
 
     /**
      * ユーザー情報を削除します。
