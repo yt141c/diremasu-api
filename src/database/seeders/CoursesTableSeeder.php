@@ -20,6 +20,7 @@ class CoursesTableSeeder extends Seeder
         foreach ($csv as $record) {
             Course::create([
                 'name' => $record['name'],
+                'title' => $record['title'],
                 'description' => $record['description'],
                 'published' => $record['published'] === 'true' ? 1 : 0,
             ]);

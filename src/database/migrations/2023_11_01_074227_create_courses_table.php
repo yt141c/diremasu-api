@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255)->unique();
+            $table->string('title', 255);
             $table->longtext('description');
             $table->boolean('published')->default(0);
             $table->softDeletes();
